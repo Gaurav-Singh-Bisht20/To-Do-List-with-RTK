@@ -1,11 +1,8 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function App() {
-  const [toDoList, setToDoList] = useState(() => {
-    const savedToDoList = localStorage.getItem("toDoList");
-    return savedToDoList ? JSON.parse(savedToDoList) : [];
-  });
-
+  const toDoList = useSelector(state => state.toDoSlice.toDoList)
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
   const [toDo, setToDo] = useState({
