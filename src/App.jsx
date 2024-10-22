@@ -1,18 +1,15 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setToDo } from "./store/toDoSlice";
 
 function App() {
-  const toDoList = useSelector(state => state.toDoSlice.toDoList)
+  const toDoList = useSelector((state) => state.toDoSlice.toDoList);
   const [isEditing, setIsEditing] = useState(false);
   const [editId, setEditId] = useState(null);
-  const [toDo, setToDo] = useState({
-    id: 1,
-    text: "",
-    done: false,
-  });
+  const Dispatch = useDispatch()
 
   const handleInputChange = (e) => {
-    setToDo({ ...toDo, text: e.target.value });
+        Dispatch(setToDo(e.taget.value));
   };
 
   const handleAddToDO = (e) => {
