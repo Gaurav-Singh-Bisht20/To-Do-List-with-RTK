@@ -1,53 +1,36 @@
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setToDo } from "./store/toDoSlice";
+import {
+  setToDo,
+  addToDo,
+  removeToDo,
+  editToDo,
+  makrDone,
+} from "./store/toDoSlice";
 
 function App() {
   const toDoList = useSelector((state) => state.toDoSlice.toDoList);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editId, setEditId] = useState(null);
-  const Dispatch = useDispatch()
+  const toDo = useSelector((state) => state.toDoSlice.toDo);
+  const Dispatch = useDispatch();
 
   const handleInputChange = (e) => {
-        Dispatch(setToDo(e.taget.value));
+    Dispatch(setToDo(e.target.value));
   };
 
   const handleAddToDO = (e) => {
     e.preventDefault();
-    if (toDo.text.trim() === "") return;
-
-    if (isEditing) {
-      setToDoList((prevList) =>
-        prevList.map((item) =>
-          item.id === editId ? { ...item, text: toDo.text } : item
-        )
-      );
-
-      setEditId(null);
-      setIsEditing(false);
-    } else {
-      setToDoList((prevList) => [...prevList, { ...toDo, id: toDo.id }]);
-      localStorage.setItem("toDoList", toDoList);
-      setToDo((prev) => ({ id: prev.id + 1, text: "" })); // Reset the input
-    }
+    Dispatch(addToDo());
   };
 
   const handleDelete = (id) => {
-    setToDoList((prevList) => prevList.filter((item) => item.id !== id));
+    Dispatch(removeToDo(id));
   };
 
   const handleEdit = (id) => {
-    console.log("edit clicked", id);
-    let editToDo = toDoList.find((item) => item.id === id);
-    setToDo({ ...editToDo });
-    setIsEditing(true);
-    setEditId(id);
+    Dispatch(editToDo(id));
   };
 
   const handleDone = (id) => {
-    setToDoList((prevList) =>
-      prevList.map((item) => (item.id === id ? { ...item, done: true } : item))
-    );
+    Dispatch(makrDone(id));
   };
 
   return (
@@ -59,7 +42,7 @@ function App() {
             onChange={handleInputChange}
             type="text"
             placeholder="Add new To-Do"
-            value={toDo.text} // Controlled input
+            value={toDo.text}
             className="outline flex-1 px-4"
           />
           <button
